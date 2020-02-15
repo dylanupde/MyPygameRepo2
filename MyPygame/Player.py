@@ -12,7 +12,12 @@ class Player(object):
 
 
     def draw(self, inputScreen):
-        pygame.draw.rect(inputScreen, (0, 0, 255), pygame.Rect(self.position.x, self.position.y, self.size, self.size))
+        myRect = pygame.draw.rect(inputScreen, (0, 0, 255), pygame.Rect(self.position.x, self.position.y, self.size, self.size))
+        
+        libtardRect = pygame.draw.rect(inputScreen, (0, 255, 0), pygame.Rect(400, 300, 40, 40))
+        if libtardRect.colliderect(myRect):
+            pygame.draw.rect(inputScreen, (0, 255, 0), pygame.Rect(500, 400, 40, 40))
+            pass
 
         scaledUpVelocity = self.velocity.scale(10)
         middlePosition = self.position + Vector2.Vector2(self.size * 0.5, self.size * 0.5)
