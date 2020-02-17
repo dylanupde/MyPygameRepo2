@@ -1,3 +1,11 @@
+#####################################################
+# Author: Dylan 
+# Date: 02/15/20
+# Email: dupdegra@uccs.edu
+# 
+# Basically just acts like a Vector2 from Unity
+#####################################################
+
 import math
 
 class Vector2(object):
@@ -22,21 +30,21 @@ class Vector2(object):
         return newVector
 
 
-    def dot (self, other):
+    def Dot (self, other):
         return (self.x * other.x + self.y * other.y)
 
 
-    def scale(self, inputScale):
+    def Scale(self, inputScale):
         newVector = Vector2(self.x * inputScale, self.y * inputScale)
         return newVector
 
 
-    def magnitude(self):
+    def Magnitude(self):
         return math.sqrt(self.x**2 + self.y**2)
 
 
-    def normalized(self):
-        myMagnitude = self.magnitude()
+    def Normalized(self):
+        myMagnitude = self.Magnitude()
         if myMagnitude != 0:
             return Vector2(self.x * (1 / myMagnitude), self.y * (1 / myMagnitude))
             pass
