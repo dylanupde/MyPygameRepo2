@@ -24,6 +24,9 @@
     <Compile Include="Agent.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EnemyHunter.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Enemy.py">
       <SubType>Code</SubType>
     </Compile>

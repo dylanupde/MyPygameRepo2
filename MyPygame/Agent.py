@@ -19,7 +19,8 @@ class Agent(object):
         self.speed = inputSpeed
         self.velocity = Vector2(0, 0)
         self.center = Vector2(self.position.x + (self.size * 0.5), self.position.x + (self.size * 0.5))
-        
+        self.myRect = None
+        self.hasDrawn = False
 
 
     def __str__(self):
@@ -30,8 +31,10 @@ class Agent(object):
 
     ### Draws this bad boi and its velocity line
     def Draw(self, inputScreen):
+        self.hasDrawn = True
+
         # Draw my rectangle at the position
-        myRect = pygame.draw.rect(inputScreen, self.color, pygame.Rect(self.position.x, self.position.y, self.size, self.size))
+        self.myRect = pygame.draw.rect(inputScreen, self.color, pygame.Rect(self.position.x, self.position.y, self.size, self.size))
         
         ## Test if we can hit stuff
         #libtardRect = pygame.draw.rect(inputScreen, (0, 0, 255), pygame.Rect(300, 100, 40, 40))
@@ -50,6 +53,15 @@ class Agent(object):
         self.velocity = self.velocity.Normalized()
         self.velocity = self.velocity.Scale(self.speed)
         self.position = self.position + self.velocity
+
+        if self.position.x < 0:
+            self.position.x = 0
+        if self.position.y < 0:
+            self.position.y = 0
+        if self.position.x > (Constants.WORLD_WIDTH - self.size):
+            self.position.x = Constants.WORLD_WIDTH - self.size
+        if self.position.y > (Constants.WORLD_HEIGHT - self.size):
+            self.position.y = Constants.WORLD_HEIGHT - self.size
 
         # Calculate our center (in case we need it in debugging)
         self.center = Vector2(self.position.x + (self.size * 0.5), self.position.y + (self.size * 0.5))

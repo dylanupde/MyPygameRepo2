@@ -11,6 +11,7 @@ import pygame
 from Vector2 import Vector2
 from Player import Player
 from Enemy import Enemy
+from EnemyHunter import EnemyHunter
 import Constants
 
 pygame.init()
@@ -33,9 +34,12 @@ playerPos = Vector2((Constants.WORLD_WIDTH * 0.5) - (Constants.PLAYER_SIZE * 0.5
 myPlayer = Player(playerPos, Constants.PLAYER_SPEED, Constants.PLAYER_SIZE)
 print(myPlayer);
 
-enemyPos = Vector2(100, 100)
-mySeekerEnemy = Enemy(enemyPos, Constants.ENEMY_SPEED, Constants.ENEMY_SIZE)
-print(mySeekerEnemy)
+enemyList = [Enemy(Vector2(100, 100), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), Enemy(Vector2(200, 100), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), 
+             Enemy(Vector2(300, 100), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), Enemy(Vector2(400, 100), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), 
+             Enemy(Vector2(500, 100), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), EnemyHunter(Vector2(100, 500), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), 
+             EnemyHunter(Vector2(200, 500), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), EnemyHunter(Vector2(300, 500), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), 
+             EnemyHunter(Vector2(400, 500), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), EnemyHunter(Vector2(500, 500), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE), ]
+
 
 while not done:
         for event in pygame.event.get():
@@ -48,8 +52,9 @@ while not done:
         myPlayer.Update()
         myPlayer.Draw(screen)
 
-        mySeekerEnemy.Update(myPlayer)
-        mySeekerEnemy.Draw(screen)
+        for thisEnemy in enemyList:
+            thisEnemy.Update(myPlayer)
+            thisEnemy.Draw(screen)
 
         pygame.display.flip()
         clock.tick(Constants.FRAME_RATE)
