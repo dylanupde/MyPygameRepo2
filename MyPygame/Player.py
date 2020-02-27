@@ -15,7 +15,7 @@ class Player(Agent):
     """The playa"""
 
     def __init__(self, inputPos, inputSpeed, inputSize):
-        Agent.__init__(self, inputPos, inputSpeed, inputSize)
+        super().__init__(inputPos, inputSpeed, inputSize)
         self.color = Constants.PLAYER_COLOR
 
 
@@ -32,4 +32,4 @@ class Player(Agent):
         if pressed[pygame.K_a] : self.velocity.x = -1
         if pressed[pygame.K_d] : self.velocity.x = 1
         
-        Agent.Update(self);
+        super().Update();

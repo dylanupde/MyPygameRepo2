@@ -23,10 +23,10 @@ class EnemyHunter(Enemy):
 
     def CalculateVelocity(self, inputPlayer):
         distToPlayer = (inputPlayer.position - self.position).Magnitude();
-        if distToPlayer < 200:
-            framesToGetToPlayer = distToPlayer / self.speed
+        if distToPlayer < Constants.MIN_ATTACK_DIST:
+            framesToGetToPlayer = distToPlayer / self.maxSpeed
             self.targetPos = inputPlayer.position + (inputPlayer.velocity).Scale(framesToGetToPlayer)
             direction = (self.targetPos - self.position).Normalized()
-            self.velocity = direction.Scale(self.speed)
+            self.velocity = direction.Scale(self.maxSpeed)
         else:
             self.velocity = Vector2(0, 0)

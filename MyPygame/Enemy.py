@@ -55,8 +55,8 @@ class Enemy(Agent):
     def CalculateVelocity(self, inputPlayer):
         self.targetPos = inputPlayer.center
         selfToPlayerVector = inputPlayer.position - self.position
-        if selfToPlayerVector.Magnitude() < 200:
-            self.velocity = (selfToPlayerVector.Normalized()).Scale(self.speed)
+        if selfToPlayerVector.Magnitude() < Constants.MIN_ATTACK_DIST:
+            self.velocity = (selfToPlayerVector.Normalized()).Scale(self.maxSpeed)
             pass
         else:
             self.velocity = Vector2(0, 0)

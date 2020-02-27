@@ -16,17 +16,16 @@ class Agent(object):
     def __init__(self, inputPos, inputSpeed, inputSize):
         self.position = inputPos
         self.size = inputSize
-        self.speed = inputSpeed
+        self.maxSpeed = inputSpeed
         self.velocity = Vector2(0, 0)
-        self.center = Vector2(self.position.x + (self.size * 0.5), self.position.x + (self.size * 0.5))
+        self.center = Vector2(0, 0)
+        self.CalculateCenter()
         self.myRect = None
         self.hasDrawn = False
 
 
     def __str__(self):
-        return ("Size: " + str(self.size) + ". Position: " + str(self.position) + ". Velocity: " + str(self.velocity) + ". Center: " + 
-                str(self.position.x + (self.size * 0.5)) + ", " + str(self.position.y + (self.size * 0.5)))
-
+        return ("Size: " + str(self.size) + ". Position: " + str(self.position) + ". Velocity: " + str(self.velocity) + ". Center: " + str(self.center))
 
 
     ### Draws this bad boi and its velocity line
@@ -35,25 +34,30 @@ class Agent(object):
 
         # Draw my rectangle at the position
         self.myRect = pygame.draw.rect(inputScreen, self.color, pygame.Rect(self.position.x, self.position.y, self.size, self.size))
-        
-        ## Test if we can hit stuff
-        #libtardRect = pygame.draw.rect(inputScreen, (0, 0, 255), pygame.Rect(300, 100, 40, 40))
-        #if libtardRect.colliderect(myRect):
-        #    pygame.draw.rect(inputScreen, (0, 0, 255), pygame.Rect(500, 400, 40, 40))
-        #    pass
 
-        # Draw the velocity line
-        scaledUpVelocity = self.velocity.Scale(5)
-        pygame.draw.line(inputScreen, (0, 0, 255), (self.center.x, self.center.y), (self.center.x + scaledUpVelocity.x, self.center.y + scaledUpVelocity.y), 3)
+        self.DrawVelocityLine(inputScreen)
 
 
 
     ### Updates the position based on the velocity. Also updates the center
     def Update(self):
-        self.velocity = self.velocity.Normalized()
-        self.velocity = self.velocity.Scale(self.speed)
-        self.position = self.position + self.velocity
+        self.MoveSelf()
+        self.ConstrainToWorldSize()
+        self.CalculateCenter()
 
+
+
+    def DrawVelocityLine(self, inputScreen):
+        scaledUpVelocity = self.velocity.Scale(Constants.VELOCITY_LINE_SCALE)
+        pygame.draw.line(inputScreen, (0, 0, 255), (self.center.x, self.center.y), (self.center.x + scaledUpVelocity.x, self.center.y + scaledUpVelocity.y), 3)
+
+
+
+    def CalculateCenter(self):
+        self.center = Vector2(self.position.x + (self.size * 0.5), self.position.y + (self.size * 0.5))
+
+
+    def ConstrainToWorldSize(self):
         if self.position.x < 0:
             self.position.x = 0
         if self.position.y < 0:
@@ -63,5 +67,8 @@ class Agent(object):
         if self.position.y > (Constants.WORLD_HEIGHT - self.size):
             self.position.y = Constants.WORLD_HEIGHT - self.size
 
-        # Calculate our center (in case we need it in debugging)
-        self.center = Vector2(self.position.x + (self.size * 0.5), self.position.y + (self.size * 0.5))
+
+    def MoveSelf(self):
+        self.velocity = self.velocity.Normalized()
+        self.velocity = self.velocity.Scale(self.maxSpeed)
+        self.position = self.position + self.velocity

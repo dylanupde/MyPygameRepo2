@@ -24,6 +24,12 @@
     <Compile Include="Agent.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Dog.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sheep.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EnemyHunter.py">
       <SubType>Code</SubType>
     </Compile>
