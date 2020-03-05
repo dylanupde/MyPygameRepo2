@@ -18,7 +18,6 @@ class Dog(Agent):
     """The dawg"""
 
     def __init__(self, inputPos, inputSpeed, inputSize):
-        self.boundingRect = None
         super().__init__(inputPos, inputSpeed, inputSize)
         self.color = Constants.PLAYER_COLOR
         self.originalArtSurface = pygame.image.load("collie.png")
@@ -27,24 +26,7 @@ class Dog(Agent):
         self.angle = math.atan2(-self.velocity.y, self.velocity.x)
         self.angle = math.degrees(self.angle)
 
-
-
-    def Draw(self, inputScreen):
-        self.hasDrawn = True
-
-        inputScreen.blit(self.currentArtSurface, [self.position.x, self.position.y])
-
-        pygame.draw.rect(inputScreen, (0, 0, 0), self.boundingRect, 2)
-
-        self.DrawVelocityLine(inputScreen)
-
-
-    def DrawVelocityLine(self, inputScreen):
-        lineVector = self.velocity.Scale(self.currentSpeed).Scale(Constants.VELOCITY_LINE_SCALE)
-        pygame.draw.line(inputScreen, (0, 0, 255), (self.center.x, self.center.y), (self.center.x + lineVector.x, self.center.y + lineVector.y), 3)
-        #pygame.draw.line(inputScreen, (0, 0, 255), (self.position.x, self.position.y), (self.position.x + lineVector.x, self.position.y + lineVector.y), 3)
-
-
+        
     ### Updates the position based on the velocity. Also updates the center
     def Update(self):
 
@@ -66,47 +48,11 @@ class Dog(Agent):
         else :
             self.currentSpeed = 0
         
-
-        
-        # Update the angle
-        self.angle = math.atan2(-self.velocity.y, self.velocity.x)
-        self.angle = math.degrees(self.angle) - 90
-        
-        self.MoveSelf()
-
-        self.currentArtSurface = pygame.transform.rotate(self.originalArtSurface, self.angle)
-        self.UpdateBoundingRect()
-        self.CalculateCenter()
-
-        self.ConstrainToWorldSize()
-
-
-    def CalculateCenter(self):
-        if self.boundingRect != None:
-            self.center = Vector2(self.boundingRect.centerx, self.boundingRect.centery)
+        super().Update()
 
 
 
-    def ConstrainToWorldSize(self):
-        if self.boundingRect.left < 0:
-            self.position.x -= self.boundingRect.left
-        if self.boundingRect.top < 0:
-            self.position.y -= self.boundingRect.top
-        if self.boundingRect.right > Constants.WORLD_WIDTH:
-            difference = self.boundingRect.right - Constants.WORLD_WIDTH
-            self.position.x -= difference
-        if self.boundingRect.bottom > Constants.WORLD_HEIGHT:
-            difference = self.boundingRect.bottom - Constants.WORLD_HEIGHT
-            self.position.y -= difference
+    def DrawVelocityLine(self, inputScreen):
+        lineVector = self.velocity.Scale(self.currentSpeed).Scale(Constants.VELOCITY_LINE_SCALE)
+        pygame.draw.line(inputScreen, (0, 255, 0), (self.center.x, self.center.y), (self.center.x + lineVector.x, self.center.y + lineVector.y), 3)
 
-        self.UpdateBoundingRect()
-
-
-    def MoveSelf(self):
-        vectorToMove = self.velocity.Normalized().Scale(self.currentSpeed)
-        self.position = self.position + vectorToMove
-
-
-    def UpdateBoundingRect(self):
-        self.boundingRect = self.currentArtSurface.get_bounding_rect()
-        self.boundingRect = self.boundingRect.move(self.position.x, self.position.y)
