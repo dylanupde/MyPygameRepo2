@@ -1,11 +1,11 @@
 import pygame
-import Vector
+import Vector2
 import Constants
 import sys
 import DrawableObject
 
 from pygame import *
-from Vector import *
+from Vector2 import *
 from sys import *
 from enum import Enum
 from DrawableObject import *
@@ -16,7 +16,7 @@ class Node(DrawableObject):
 	def __init__(self, x, y, position, size):
 		""" Initialize the Node object """
 		self.upperLeft = position					# upper left corner of the node rect
-		self.center = position + size.scale(0.5)	# center of the node rect
+		self.center = position + size.Scale(0.5)	# center of the node rect
 		self.size = size							# size of the node
 		self.neighbors = []							# list of neighbors of this node
 		self.x = x									# index into the node list

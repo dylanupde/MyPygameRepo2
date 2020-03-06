@@ -27,6 +27,9 @@
     <Compile Include="Dog.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DrawableObject.py" />
+    <Compile Include="Graph.py" />
+    <Compile Include="Node.py" />
     <Compile Include="Sheep.py">
       <SubType>Code</SubType>
     </Compile>

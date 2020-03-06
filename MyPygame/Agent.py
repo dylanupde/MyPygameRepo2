@@ -11,8 +11,9 @@ from Vector2 import Vector2
 import Constants
 import random
 import math
+from DrawableObject import DrawableObject
 
-class Agent(object):
+class Agent(DrawableObject):
     """description of class"""
 
     def __init__(self, inputPos, inputSpeed, inputSize):

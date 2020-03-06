@@ -1,10 +1,10 @@
 import Constants
 import Node
 import pygame
-import Vector
+import Vector2
 
 from pygame import *
-from Vector import *
+from Vector2 import *
 from Node import *
 from enum import Enum
 
@@ -27,7 +27,7 @@ class Graph():
 		for i in range(self.gridHeight):
 			row = []
 			for j in range(self.gridWidth):
-				node = Node(i, j, Vector(Constants.GRID_SIZE * j, Constants.GRID_SIZE * i), Vector(Constants.GRID_SIZE, Constants.GRID_SIZE))
+				node = Node(i, j, Vector2(Constants.GRID_SIZE * j, Constants.GRID_SIZE * i), Vector2(Constants.GRID_SIZE, Constants.GRID_SIZE))
 				row.append(node)
 			self.nodes.append(row)
 
@@ -112,7 +112,12 @@ class Graph():
 		print("BREADTH-FIRST")
 		self.reset()
 
-		# TODO: Add your breadth-first code here!
+		unvisitedList = []
+		for i in range(self.gridHeight):
+			for j in range(self.gridWidth):
+				unvisitedList.append(self.nodes[i][j])
+
+		print(len(unvisitedList))
 
 		return []
 
@@ -142,6 +147,9 @@ class Graph():
 		# TODO: Add your Best-first code here!
 
 		return []
+
+
+
 
 	def draw(self, screen):
 		""" Draw the graph """
