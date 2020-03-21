@@ -82,7 +82,9 @@ class Sheep(Agent):
         # If there's neighbors or the spooky dog is nearby or we're near a boundary, MOVE
         if len(self.myNeighborsList) > 0 or self.dogForce.x != 0 or self.dogForce.y != 0 or self.boundaryForce.x != 0 or self.boundaryForce.y != 0:
             self.currentSpeed = self.maxSpeed
-            self.velocity = self.dogForce + self.flockingVelocityToAdd
+            targetVelocity = self.dogForce + self.flockingVelocityToAdd
+            velocityDiffWeighted = (targetVelocity - self.velocity).Scale(Constants.SHEEP_ANGULAR_SPEED)
+            self.velocity = self.velocity + velocityDiffWeighted
         else:
             self.currentSpeed = 0
 
@@ -96,7 +98,7 @@ class Sheep(Agent):
 
 
     ### FLOCKING!!!!!!!!!!!!!!
-    def DoFlockingStuff(self, inputSheepList):
+    def DoFlockingStuff(self, inputSheepList, inputGraph):
         self.myNeighborsList = self.CalculateNeighbors(inputSheepList)
 
         alignmentVector = Vector2(0, 0)
@@ -112,8 +114,9 @@ class Sheep(Agent):
             separationVector = self.GetSeparationVector(self.myNeighborsList)
         if Constants.BOUNDARY_FORCES_ON:
             self.boundaryForce = self.GetBoundsForceVector()
+            fenceForce = self.GetObstaclesForceVector(inputGraph)
 
-        self.flockingVelocityToAdd = alignmentVector + cohesionVector + separationVector + self.boundaryForce
+        self.flockingVelocityToAdd = alignmentVector + cohesionVector + separationVector + self.boundaryForce + fenceForce
 
 
     def CalculateNeighbors(self, inputSheepList):
@@ -209,3 +212,14 @@ class Sheep(Agent):
             self.linesToDrawList.append(boundaryForce)
 
         return boundaryForce
+
+
+
+    def GetObstaclesForceVector(self, inputGraph):
+        forceToAdd = Vector2(0, 0)
+        for thisObstacle in inputGraph.obstacles:
+            distFromSheep = (thisObstacle.center - self.center).Magnitude()
+            if distFromSheep < Constants.SHEEP_OBSTACLE_RADIUS:
+                forceToAdd = forceToAdd + (self.center - thisObstacle.center).Normalized().Scale(Constants.SHEEP_BOUNDARY_INFLUENCE_WEIGHT)
+
+        return forceToAdd

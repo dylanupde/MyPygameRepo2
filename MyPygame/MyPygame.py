@@ -155,27 +155,32 @@ while not done:
                     Constants.BOUNDARY_FORCES_ON = not Constants.BOUNDARY_FORCES_ON
                     print("BoundaryForcesOn: ", Constants.BOUNDARY_FORCES_ON)
                 if event.key == pygame.K_a:
-                    graph.findPath_AStar(1, 2)
+                    Constants.SEARCH_MODE = "A"
+                    #graph.findPath_Djikstra(graph.getNodeFromPoint(myDog.center), graph.getNodeFromPoint(sheepList[0].center), True)
                 if event.key == pygame.K_s:
-                    graph.findPath_BestFirst(1, 2)
+                    Constants.SEARCH_MODE = "BEST"
+                    #graph.findPath_BestFirst(graph.getNodeFromPoint(myDog.center), graph.getNodeFromPoint(sheepList[0].center))
                 if event.key == pygame.K_d:
-                    graph.findPath_Djikstra(1, 2)
+                    Constants.SEARCH_MODE = "DJIKSTRA"
+                    #graph.findPath_Djikstra(graph.getNodeFromPoint(myDog.center), graph.getNodeFromPoint(sheepList[0].center), False)
                 if event.key == pygame.K_f:
-                    graph.findPath_Breadth(1, 2)
+                    Constants.SEARCH_MODE = "BREADTH"
+                    #graph.findPath_Breadth(graph.getNodeFromPoint(myDog.center), graph.getNodeFromPoint(sheepList[0].center))
 
 
     screen.fill(Constants.BACKGROUND_COLOR)
             
     graph.draw(screen)
-    myDog.Update()
-    myDog.Draw(screen)
 
     testNode = graph.getNodeFromPoint(Vector2(50, 90))
 
     for thisSheep in sheepList:
-        thisSheep.DoFlockingStuff(sheepList)
+        thisSheep.DoFlockingStuff(sheepList, graph)
         thisSheep.Update(myDog)
         thisSheep.Draw(screen)
+
+    myDog.Update(graph, graph.getNodeFromPoint(sheepList[0].center))
+    myDog.Draw(screen)
 
     pygame.display.flip()
     clock.tick(Constants.FRAME_RATE)
